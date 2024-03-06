@@ -1,0 +1,65 @@
+<?php
+
+$host="localhost";
+$dbusername = "root";
+$dbpassword = "";
+$dbname = "online_pet_shop";
+
+$conn = new mysqli($host, $dbusername, $dbpassword, $dbname);
+
+if (mysqli_connect_error()) {
+		die('Connect error('. mysqli_connect_error().')'. mysqli_connect_error());
+	}
+
+
+    $email = $_POST['email'];
+    $mobile = $_POST['mobile'];
+
+        $sql = "SELECT * FROM `user` WHERE `email`='$email' && `mobile`='$mobile';";
+        $result=mysqli_query($conn, $sql);
+       $resultCheck = mysqli_num_rows($result);
+       if($resultCheck > 0){
+
+           while ($row = mysqli_fetch_assoc($result)) {
+
+			session_start();
+            $_SESSION['tmp1']=$row['password'];
+			header('Location: forgot_pass.php');
+          
+           }
+        }
+        
+           else{
+
+           
+           if(mysqli_connect_error()){
+            die('Connect error('. mysqli_connect_error().')'. mysqli_connect_error());
+
+           }
+           $email = $_POST['email'];
+          $mobile = $_POST['mobile'];
+          $sql = "SELECT * FROM `seller` WHERE `email`='$email' && `mobile`='$mobile';";
+          $result=mysqli_query($conn, $sql);
+         $resultCheck = mysqli_num_rows($result);
+         if($resultCheck > 0){
+  
+             while ($row = mysqli_fetch_assoc($result)) {
+  
+              session_start();
+              $_SESSION['tmp1']=$row['password'];
+              header('Location: forgot_pass.php');
+            
+             }
+
+
+
+
+       
+    }
+       else{
+        session_start();
+        $_SESSION['tmp1']="Invalid username or mobile!";
+        header('Location: forgot_pass.php');
+    }
+}
+?>
